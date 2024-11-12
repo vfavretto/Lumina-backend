@@ -12,7 +12,6 @@ const connectDB = async () => {
     await mongoose.connect(mongoURI);
     console.log('MongoDB connected');
   } catch (error) {
-    // Garantir que o erro seja do tipo Error
     if (error instanceof Error) {
       console.error('MongoDB connection error:', error.message);
     } else {
