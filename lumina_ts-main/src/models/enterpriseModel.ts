@@ -1,6 +1,50 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
-const EmpresaSchema = new mongoose.Schema({
+// Interface para o endereço da empresa
+interface IEndereco {
+  cidade: string;
+  UF: string;
+  CEP: string;
+  logradouro: string;
+  numero: string;
+  bairro: string;
+  complemento: string;
+}
+
+// Interface para as redes sociais
+interface IRedesSociais {
+  facebook?: string;
+  instagram?: string;
+  linkedin?: string;
+}
+
+// Interface para autenticação
+interface IAuth {
+  nomeEmpresa: string;
+  email: string;
+  password: string;
+}
+
+// Interface principal para o modelo de Empresa
+interface IEmpresa extends Document {
+  auth: IAuth;
+  telefoneEmpresa?: string;
+  emailEmpresa?: string;
+  siteEmpresa?: string;
+  tipoEmpresa: string[];
+  CNPJ?: string;
+  endereco?: IEndereco;
+  redesSociais?: IRedesSociais;
+  servicos: mongoose.Types.ObjectId[];
+  userImg?: string;
+  local?: {
+    type: string;
+    coordinates: number[];
+  };
+}
+
+// Definindo o esquema do modelo de Empresa
+const EmpresaSchema = new Schema<IEmpresa>({
   auth: {
     nomeEmpresa: { type: String, required: true },
     email: { type: String, required: true, unique: true },
@@ -25,7 +69,6 @@ const EmpresaSchema = new mongoose.Schema({
     instagram: { type: String },
     linkedin: { type: String },
   },
-  // mensagens: [{ type: mongoose.Schema.Types.ObjectId, ref: "Mensagem" }],
   servicos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Servico" }],
   userImg: { type: String },
   local: {
@@ -34,4 +77,5 @@ const EmpresaSchema = new mongoose.Schema({
   },
 });
 
-export const Empresa = mongoose.model("Empresa", EmpresaSchema);
+// Criando o modelo de Empresa
+export const Empresa = mongoose.model<IEmpresa>("Empresa", EmpresaSchema);
