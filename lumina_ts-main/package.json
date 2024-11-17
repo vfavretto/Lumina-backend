@@ -1,13 +1,17 @@
 {
-  "name": "lumina3-0",
-  "private": true,
-  "version": "0.0.0",
+  "name": "typescriptexpress",
+  "version": "1.0.0",
+  "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev --loader ts-node/esm --respawn --transpile-only src/server.ts",
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "build": "tsc"
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "author": "",
+  "license": "ISC",
+  "description": "",
   "dependencies": {
+    "@vercel/node": "^3.2.24",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
