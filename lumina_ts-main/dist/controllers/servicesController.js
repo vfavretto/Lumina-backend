@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.listarServicosDaEmpresa = exports.buscarServicoPorId = void 0;
 const servicesModel_1 = require("../models/servicesModel");
 const enterpriseModel_1 = require("../models/enterpriseModel");
-// Função para buscar um serviço pelo ID
 const buscarServicoPorId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
@@ -29,7 +28,6 @@ const buscarServicoPorId = (req, res) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.buscarServicoPorId = buscarServicoPorId;
-// Função para listar os serviços de uma empresa
 const listarServicosDaEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { idEmpresa } = req.params;
     try {
@@ -38,9 +36,8 @@ const listarServicosDaEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, 
             res.status(404).json({ error: "Empresa não encontrada" });
             return;
         }
-        // Consultando os serviços associados à empresa
         const servicos = yield servicesModel_1.Servico.find({
-            _id: { $in: empresa.servicos }, // Filtrando pelos IDs de serviços da empresa
+            _id: { $in: empresa.servicos },
         });
         res.status(200).json(servicos);
     }

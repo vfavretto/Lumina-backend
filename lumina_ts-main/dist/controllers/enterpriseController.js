@@ -16,18 +16,41 @@ exports.deleteEmpresa = exports.updateEmpresa = exports.getEmpresa = exports.che
 const enterpriseModel_1 = require("../models/enterpriseModel");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+/**
+ * @swagger
+ * /api/v1/empresa/register:
+ *   post:
+ *     summary: Registra uma nova empresa
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nomeEmpresa:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       '201':
+ *         description: Empresa criada com sucesso
+ *       '400':
+ *         description: Empresa já registrada
+ *       '500':
+ *         description: Erro interno do servidor
+ */
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { nomeEmpresa, email, password } = req.body;
     try {
-        // Verifica se o usuário já existe
         const existingEmpresa = yield enterpriseModel_1.Empresa.findOne({ "auth.email": email });
         if (existingEmpresa) {
             res.status(400).json({ error: "User already exists" });
             return;
         }
-        // Criptografa a senha
         const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
-        // Cria uma nova empresa com apenas os dados de autenticação
         const empresa = new enterpriseModel_1.Empresa({
             auth: {
                 nomeEmpresa,
@@ -35,11 +58,8 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
                 password: hashedPassword,
             },
         });
-        // Salva a empresa no banco de dados
         yield empresa.save();
-        // Gera um token JWT para o usuário
         const token = jsonwebtoken_1.default.sign({ empresaId: empresa._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        // Retorna os dados da empresa e o token
         res.status(201).json({ empresa, token });
     }
     catch (error) {
@@ -47,24 +67,44 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.register = register;
+/**
+ * @swagger
+ * /api/v1/empresa/login:
+ *   post:
+ *     summary: Realiza login para a empresa
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Login realizado com sucesso
+ *       '401':
+ *         description: Credenciais inválidas
+ *       '500':
+ *         description: Erro interno do servidor
+ */
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     try {
-        // Busca a empresa pelo email da empresa
         const empresa = yield enterpriseModel_1.Empresa.findOne({ "auth.email": email });
         if (!empresa || !empresa.auth) {
             res.status(401).json({ error: "User not found" });
             return;
         }
-        // Verifica se a senha está correta
         const isPasswordValid = yield bcryptjs_1.default.compare(password, empresa.auth.password);
         if (!isPasswordValid) {
             res.status(401).json({ error: "Invalid password" });
             return;
         }
-        // Gera o token JWT
         const token = jsonwebtoken_1.default.sign({ empresaId: empresa._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-        // Retorna os dados da empresa e o token
         res.status(200).json({ empresa, token });
     }
     catch (error) {
@@ -72,6 +112,17 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.login = login;
+/**
+ * @swagger
+ * /api/v1/empresa/auth:
+ *   get:
+ *     summary: Verifica a autenticação do token JWT
+ *     responses:
+ *       '200':
+ *         description: Token válido
+ *       '401':
+ *         description: Token inválido ou não fornecido
+ */
 const checkAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[1]; // Extraímos o token do cabeçalho
@@ -80,17 +131,13 @@ const checkAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function
         return;
     }
     try {
-        // Verifica e decodifica o token JWT
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
-        // Busca a empresa pelo ID do token
         const empresa = yield enterpriseModel_1.Empresa.findById(decoded.empresaId);
         if (!empresa) {
             res.status(404).json({ error: "Empresa not found" });
             return;
         }
-        // Adiciona os dados da empresa ao objeto `req` para uso nas rotas subsequentes
         req.body.authenticatedEmpresa = empresa;
-        // Passa o controle para a próxima função de middleware ou rota
         next();
     }
     catch (error) {
@@ -99,17 +146,34 @@ const checkAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.checkAuth = checkAuth;
+/**
+ * @swagger
+ * /api/v1/empresa/{id}:
+ *   get:
+ *     summary: Busca uma empresa pelo ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Empresa encontrada
+ *       '404':
+ *         description: Empresa não encontrada
+ *       '500':
+ *         description: Erro interno do servidor
+ */
 const getEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
-        // Busca a empresa pelo ID
         const empresa = yield enterpriseModel_1.Empresa.findById(id);
         console.log(empresa);
         if (!empresa) {
             res.status(404).json({ error: "Empresa not found" });
             return;
         }
-        // Retorna os dados da empresa
         res.status(200).json(empresa);
     }
     catch (error) {
@@ -118,13 +182,64 @@ const getEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getEmpresa = getEmpresa;
+/**
+ * @swagger
+ * /api/v1/empresa/{id}:
+ *   put:
+ *     summary: Atualiza os dados de uma empresa
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nomeEmpresa:
+ *                 type: string
+ *               senha:
+ *                 type: string
+ *               telefoneEmpresa:
+ *                 type: string
+ *               emailEmpresa:
+ *                 type: string
+ *               siteEmpresa:
+ *                 type: string
+ *               tipoEmpresa:
+ *                 type: string
+ *               CNPJ:
+ *                 type: string
+ *               endereco:
+ *                 type: object
+ *               redesSociais:
+ *                 type: object
+ *               mensagens:
+ *                 type: object
+ *               servicos:
+ *                 type: object
+ *               userImg:
+ *                 type: string
+ *               local:
+ *                 type: object
+ *     responses:
+ *       '200':
+ *         description: Empresa atualizada com sucesso
+ *       '404':
+ *         description: Empresa não encontrada
+ *       '500':
+ *         description: Erro interno do servidor
+ */
 const updateEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params; // O ID da empresa será passado na URL
+    const { id } = req.params;
     const { nomeEmpresa, senha, telefoneEmpresa, emailEmpresa, siteEmpresa, tipoEmpresa, CNPJ, endereco, redesSociais, mensagens, servicos, userImg, local } = req.body;
     try {
-        // Atualiza os dados da empresa com os campos fornecidos
         const updatedEmpresa = yield enterpriseModel_1.Empresa.findByIdAndUpdate(id, {
-            'auth.nomeEmpresa': nomeEmpresa, // Atualiza o campo dentro de 'auth'
+            'auth.nomeEmpresa': nomeEmpresa,
             'auth.senha': senha,
             'auth.email': emailEmpresa,
             telefoneEmpresa,
@@ -138,9 +253,7 @@ const updateEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             servicos,
             userImg,
             local
-        }, { new: true } // Retorna o documento atualizado
-        );
-        // Verifica se a empresa foi encontrada
+        }, { new: true });
         if (!updatedEmpresa) {
             res.status(404).json({ error: "Empresa not found" });
             return;
@@ -153,6 +266,25 @@ const updateEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.updateEmpresa = updateEmpresa;
+/**
+ * @swagger
+ * /api/v1/empresa/{id}:
+ *   delete:
+ *     summary: Remove uma empresa pelo ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '204':
+ *         description: Empresa deletada com sucesso
+ *       '404':
+ *         description: Empresa não encontrada
+ *       '500':
+ *         description: Erro interno do servidor
+ */
 const deleteEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {

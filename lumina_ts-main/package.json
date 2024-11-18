@@ -21,7 +21,8 @@
     "mongodb": "^6.9.0",
     "mongoose": "^8.8.1",
     "swagger-autogen": "^2.23.7",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "yaml": "^2.6.0"
   },
   "devDependencies": {
     "@shelf/jest-mongodb": "^4.3.2",
