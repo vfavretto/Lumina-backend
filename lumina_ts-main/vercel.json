@@ -5,15 +5,22 @@
     {
       "src": "dist/index.js",
       "use": "@vercel/node",
-      "config": { "includeFiles": ["dist/**"] }
+      "config": { 
+        "includeFiles": [
+          "dist/**", 
+          "node_modules/swagger-ui-dist/**"
+        ] 
+      }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
       "dest": "dist/index.js"
+    },
+    {
+      "src": "/docs/(.*)",
+      "dest": "/swagger-ui-dist/$1"
     }
   ]
 }
-
-
