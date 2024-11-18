@@ -7,32 +7,6 @@ import jwt from "jsonwebtoken";
 interface AuthRequest extends Request {
   admin?: IAdministrador;
 }
-
-/**
- * @swagger
- * /api/v1/admin/adicionar-primeiro:
- *   post:
- *     summary: Adiciona o primeiro administrador
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       '201':
- *         description: Primeiro administrador criado com sucesso
- *       '400':
- *         description: Já existe um administrador cadastrado
- *       '500':
- *         description: Erro interno do servidor
- */
-
 export const adicionarPrimeiroAdmin = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
@@ -68,30 +42,6 @@ export const adicionarPrimeiroAdmin = async (req: Request, res: Response): Promi
   }
 };
 
-/**
- * @swagger
- * /api/v1/admin/adicionar:
- *   post:
- *     summary: Adiciona um novo administrador
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       '201':
- *         description: Novo administrador criado com sucesso
- *       '400':
- *         description: Email já em uso
- *       '500':
- *         description: Erro interno do servidor
- */
 export const adicionarAdmin = async (req: AuthRequest, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
@@ -121,30 +71,6 @@ export const adicionarAdmin = async (req: AuthRequest, res: Response): Promise<v
   }
 };
 
-/**
- * @swagger
- * /api/v1/admin/login:
- *   post:
- *     summary: Realiza login do administrador
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       '200':
- *         description: Login bem-sucedido
- *       '401':
- *         description: Email ou senha inválidos
- *       '500':
- *         description: Erro interno do servidor
- */
 export const validarAdmin = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
 
@@ -211,25 +137,6 @@ export const verificarAutenticacaoAdmin = async (
   }
 };
 
-/**
- * @swagger
- * /api/v1/empresa/deletar/{id}:
- *   delete:
- *     summary: Deleta uma empresa
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       '200':
- *         description: Empresa deletada com sucesso
- *       '404':
- *         description: Empresa não encontrada
- *       '500':
- *         description: Erro interno do servidor
- */
 export const deletarEmpresa = async (
   req: AuthRequest,
   res: Response
@@ -256,41 +163,6 @@ export const deletarEmpresa = async (
   }
 };
 
-/**
- * @swagger
- * /api/v1/empresa/editar/{id}:
- *   put:
- *     summary: Edita os dados de uma empresa
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               auth:
- *                 type: object
- *                 properties:
- *                   email:
- *                     type: string
- *                   password:
- *                     type: string
- *     responses:
- *       '200':
- *         description: Empresa atualizada com sucesso
- *       '400':
- *         description: Email já em uso
- *       '404':
- *         description: Empresa não encontrada
- *       '500':
- *         description: Erro interno do servidor
- */
 export const editarEmpresa = async (
   req: AuthRequest,
   res: Response
@@ -342,17 +214,6 @@ export const editarEmpresa = async (
   }
 };
 
-/**
- * @swagger
- * /api/v1/empresas:
- *   get:
- *     summary: Lista todas as empresas
- *     responses:
- *       '200':
- *         description: Lista de empresas
- *       '500':
- *         description: Erro interno do servidor
- */
 export const listarEmpresas = async (
   req: AuthRequest,
   res: Response
@@ -371,25 +232,6 @@ export const listarEmpresas = async (
   }
 };
 
-/**
- * @swagger
- * /api/v1/empresa/{id}:
- *   get:
- *     summary: Busca uma empresa específica
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: string
- *     responses:
- *       '200':
- *         description: Empresa encontrada
- *       '404':
- *         description: Empresa não encontrada
- *       '500':
- *         description: Erro interno do servidor
- */
 export const buscarEmpresa = async (
   req: AuthRequest,
   res: Response

@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://lumina-ts-main.vercel.app"
+      "url": "http://localhost:5000/"
     }
   ],
   "paths": {
@@ -180,6 +180,9 @@
                     "example": "any"
                   },
                   "nomeEmpresa": {
+                    "example": "any"
+                  },
+                  "senha": {
                     "example": "any"
                   },
                   "telefoneEmpresa": {

@@ -11,17 +11,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buscarUltimaMensagem = exports.buscarMensagensEntreEmpresas = exports.enviarMensagem = void 0;
 const messagesModel_1 = require("../models/messagesModel");
-// Função para enviar uma mensagem
+/**
+ * @swagger
+ * /api/v1/mensagens:
+ *   post:
+ *     summary: Envia uma nova mensagem entre empresas
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               idEmpresaEnvia:
+ *                 type: string
+ *               idEmpresaRecebe:
+ *                 type: string
+ *               mensagem:
+ *                 type: string
+ *     responses:
+ *       '201':
+ *         description: Mensagem enviada com sucesso
+ *       '500':
+ *         description: Erro interno do servidor
+ */
 const enviarMensagem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { idEmpresaEnvia, idEmpresaRecebe, mensagem } = req.body;
     try {
-        // Criação da nova mensagem
         const novaMensagem = new messagesModel_1.Mensagem({
             idEmpresaEnvia,
             idEmpresaRecebe,
             mensagem,
         });
-        // Salvando a nova mensagem no banco de dados
         yield novaMensagem.save();
         res.status(201).json(novaMensagem);
     }
@@ -31,17 +52,53 @@ const enviarMensagem = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.enviarMensagem = enviarMensagem;
-// Função para buscar todas as mensagens entre duas empresas
+/**
+ * @swagger
+ * /api/v1/mensagens/{idEmpresa1}/{idEmpresa2}:
+ *   get:
+ *     summary: Busca todas as mensagens entre duas empresas
+ *     parameters:
+ *       - in: path
+ *         name: idEmpresa1
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: idEmpresa2
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Lista de mensagens entre as empresas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   idEmpresaEnvia:
+ *                     type: string
+ *                   idEmpresaRecebe:
+ *                     type: string
+ *                   mensagem:
+ *                     type: string
+ *                   data:
+ *                     type: string
+ *                     format: date-time
+ *       '500':
+ *         description: Erro interno do servidor
+ */
 const buscarMensagensEntreEmpresas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { idEmpresa1, idEmpresa2 } = req.params;
     try {
-        // Buscando as mensagens entre duas empresas
         const mensagens = yield messagesModel_1.Mensagem.find({
             $or: [
                 { idEmpresaEnvia: idEmpresa1, idEmpresaRecebe: idEmpresa2 },
                 { idEmpresaEnvia: idEmpresa2, idEmpresaRecebe: idEmpresa1 },
             ],
-        }).sort({ data: 1 }); // Ordenando por data crescente (mensagens mais antigas primeiro)
+        }).sort({ data: 1 });
         res.status(200).json(mensagens);
     }
     catch (error) {
@@ -50,17 +107,51 @@ const buscarMensagensEntreEmpresas = (req, res) => __awaiter(void 0, void 0, voi
     }
 });
 exports.buscarMensagensEntreEmpresas = buscarMensagensEntreEmpresas;
-// Função para buscar a última mensagem entre duas empresas
+/**
+ * @swagger
+ * /api/v1/mensagens/ultima/{idEmpresa1}/{idEmpresa2}:
+ *   get:
+ *     summary: Busca a última mensagem entre duas empresas
+ *     parameters:
+ *       - in: path
+ *         name: idEmpresa1
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: idEmpresa2
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Última mensagem entre as empresas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 idEmpresaEnvia:
+ *                   type: string
+ *                 idEmpresaRecebe:
+ *                   type: string
+ *                 mensagem:
+ *                   type: string
+ *                 data:
+ *                   type: string
+ *                   format: date-time
+ *       '500':
+ *         description: Erro interno do servidor
+ */
 const buscarUltimaMensagem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { idEmpresa1, idEmpresa2 } = req.params;
     try {
-        // Buscando a última mensagem entre as duas empresas
         const ultimaMensagem = yield messagesModel_1.Mensagem.findOne({
             $or: [
                 { idEmpresaEnvia: idEmpresa1, idEmpresaRecebe: idEmpresa2 },
                 { idEmpresaEnvia: idEmpresa2, idEmpresaRecebe: idEmpresa1 },
             ],
-        }).sort({ data: -1 }); // Ordenando por data decrescente (última mensagem primeiro)
+        }).sort({ data: -1 });
         res.status(200).json(ultimaMensagem);
     }
     catch (error) {
