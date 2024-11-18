@@ -25,10 +25,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Empresa = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-<<<<<<< HEAD
-=======
-// Definindo o esquema do modelo de Empresa
->>>>>>> 13009c0098f9d41bbc88928512de1ab5a526b7e1
 const EmpresaSchema = new mongoose_1.Schema({
     auth: {
         nomeEmpresa: { type: String, required: true },
@@ -61,5 +57,4 @@ const EmpresaSchema = new mongoose_1.Schema({
         coordinates: [{ type: Number }],
     },
 });
-// Criando o modelo de Empresa
 exports.Empresa = mongoose_1.default.model("Empresa", EmpresaSchema);

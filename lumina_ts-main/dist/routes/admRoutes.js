@@ -11,11 +11,7 @@ router.delete("/admin/:id", admController_1.verificarAutenticacaoAdmin, admContr
 router.put("/admin/:id", admController_1.verificarAutenticacaoAdmin, admController_1.editarEmpresa);
 router.get("/admin", admController_1.verificarAutenticacaoAdmin, admController_1.listarEmpresas);
 router.get("/admin/:id", admController_1.verificarAutenticacaoAdmin, admController_1.buscarEmpresa);
-<<<<<<< HEAD
 // Rota Públicas - para validar login de administrador
-=======
-// Rota para validar login de administrador
->>>>>>> 13009c0098f9d41bbc88928512de1ab5a526b7e1
 router.post("/admin/login", admController_1.validarAdmin);
 router.post("/admin/primeiro", admController_1.adicionarPrimeiroAdmin);
 router.post("/admin", admController_1.verificarAutenticacaoAdmin, admController_1.adicionarAdmin);
