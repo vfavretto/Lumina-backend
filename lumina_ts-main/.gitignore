@@ -1,5 +1,8 @@
 ### dotenv ###
 .env
+.env.local
+.env.development
+.env.test
 
 ### vercel ###
 .vercel
