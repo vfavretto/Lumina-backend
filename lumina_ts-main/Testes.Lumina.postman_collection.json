@@ -1,0 +1,680 @@
+{
+	"info": {
+		"_postman_id": "557ea749-c50a-40dc-9a2e-b3a2aa532a4a",
+		"name": "Lumina",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38226191"
+	},
+	"item": [
+		{
+			"name": "Empresas",
+			"item": [
+				{
+					"name": "Cadastrar Empresa",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nomeEmpresa\": \"EmpresaX\",\r\n    \"email\": \"empresax@email.com\",\r\n    \"password\": \"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://lumina-backend-three.vercel.app/api/v1/auth/register",
+							"protocol": "https",
+							"host": [
+								"lumina-backend-three",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Empresa",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"empresax@email.com\",\r\n    \"password\": \"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://lumina-backend-three.vercel.app/api/v1/auth/login",
+							"protocol": "https",
+							"host": [
+								"lumina-backend-three",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Empresa",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_Empresa}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nomeEmpresa\": \"EmpresaXX\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://lumina-backend-three.vercel.app/api/v1/auth/profile/{{EmpresaID}}",
+							"protocol": "https",
+							"host": [
+								"lumina-backend-three",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"profile",
+								"{{EmpresaID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Dados Empresa",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_Empresa}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://lumina-backend-three.vercel.app/api/v1/auth/profile/{{EmpresaID}}",
+							"protocol": "https",
+							"host": [
+								"lumina-backend-three",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"profile",
+								"{{EmpresaID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletar Empresa",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_Empresa}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://lumina-backend-three.vercel.app/api/v1/auth/profile/{{EmpresaID}}",
+							"protocol": "https",
+							"host": [
+								"lumina-backend-three",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"auth",
+								"profile",
+								"{{EmpresaID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Adm",
+			"item": [
+				{
+					"name": "Primeiro Adm",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"lumina@email.com\",\r\n    \"password\": \"iluminados\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://lumina-backend-three.vercel.app/api/v1/admins/admin/primeiro",
+							"protocol": "https",
+							"host": [
+								"lumina-backend-three",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admins",
+								"admin",
+								"primeiro"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login Adm",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"lumina@email.com\",\r\n    \"password\": \"iluminados\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://lumina-backend-three.vercel.app/api/v1/admins/admin/login",
+							"protocol": "https",
+							"host": [
+								"lumina-backend-three",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admins",
+								"admin",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Adm",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_Adm}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"muhadm@lumina.com\",\r\n    \"password\": \"123456789\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://lumina-backend-three.vercel.app/api/v1/admins/admin",
+							"protocol": "https",
+							"host": [
+								"lumina-backend-three",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admins",
+								"admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Empresas ADM",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_Adm}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://lumina-backend-three.vercel.app/api/v1/admins/admin/",
+							"protocol": "https",
+							"host": [
+								"lumina-backend-three",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admins",
+								"admin",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Editar Empresa",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_Adm}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nomeEmpresa\": \"Lumina\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://lumina-backend-three.vercel.app/api/v1/admins/admin/{{EmpresaID}}",
+							"protocol": "https",
+							"host": [
+								"lumina-backend-three",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admins",
+								"admin",
+								"{{EmpresaID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Empresa",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_Adm}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://lumina-backend-three.vercel.app/api/v1/admins/admin/{{EmpresaID}}",
+							"protocol": "https",
+							"host": [
+								"lumina-backend-three",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admins",
+								"admin",
+								"{{EmpresaID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Empresa",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{JWT_Adm}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://lumina-backend-three.vercel.app/api/v1/admins/admin/{{EmpresaID}}",
+							"protocol": "https",
+							"host": [
+								"lumina-backend-three",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"admins",
+								"admin",
+								"{{EmpresaID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Mensagens",
+			"item": [
+				{
+					"name": "Enviar mensagem",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idEmpresaEnvia\": \"673bab545ec45f325992c854\",\r\n    \"idEmpresaRecebe\": \"673bab545ec45f325992c854\",\r\n    \"mensagem\": \"mensagem pra mim mesmo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://lumina-backend-three.vercel.app/api/v1/messages/mensagens",
+							"protocol": "https",
+							"host": [
+								"lumina-backend-three",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"messages",
+								"mensagens"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar mensagens",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idEmpresaEnvia\": \"673bab545ec45f325992c854\",\r\n    \"idEmpresaRecebe\": \"673bab545ec45f325992c854\",\r\n    \"mensagem\": \"mensagem pra mim mesmo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://lumina-backend-three.vercel.app/api/v1/messages/mensagens/{{EnviaID}}/{{RecebeID}}",
+							"protocol": "https",
+							"host": [
+								"lumina-backend-three",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"messages",
+								"mensagens",
+								"{{EnviaID}}",
+								"{{RecebeID}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar ultima mensagem",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"idEmpresaEnvia\": \"673bab545ec45f325992c854\",\r\n    \"idEmpresaRecebe\": \"673bab545ec45f325992c854\",\r\n    \"mensagem\": \"mensagem pra mim mesmo\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://lumina-backend-three.vercel.app/api/v1/messages/mensagens/{{EnviaID}}/{{RecebeID}}",
+							"protocol": "https",
+							"host": [
+								"lumina-backend-three",
+								"vercel",
+								"app"
+							],
+							"path": [
+								"api",
+								"v1",
+								"messages",
+								"mensagens",
+								"{{EnviaID}}",
+								"{{RecebeID}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Servicos",
+			"item": [
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "JWT_Empresa",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbXByZXNhSWQiOiI2NzNiYTQzNjg5YmQ3M2JmNTc1MjBiMDIiLCJpYXQiOjE3MzE5NjE5MTYsImV4cCI6MTczMTk2NTUxNn0.8aoMM4wcl_BpIMjCLO4KGlvzioOgkMU_NCdiNMcC_Fk",
+			"type": "string"
+		},
+		{
+			"key": "EmpresaID",
+			"value": "673ba43689bd73bf57520b02",
+			"type": "string"
+		},
+		{
+			"key": "AdmID",
+			"value": "673ba7115ec45f325992c836",
+			"type": "string"
+		},
+		{
+			"key": "JWT_Adm",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZG1pbklkIjoiNjczYmE3MTE1ZWM0NWYzMjU5OTJjODM2IiwiaWF0IjoxNzMxOTYyNjQyLCJleHAiOjE3MzIwNDkwNDJ9.ntJugic8vTd41KRfGqBLcbOxo1asWDiUqSs-fP3tL3w",
+			"type": "string"
+		},
+		{
+			"key": "EnviaID",
+			"value": "673bab545ec45f325992c854",
+			"type": "string"
+		},
+		{
+			"key": "RecebeID",
+			"value": "673bab545ec45f325992c854",
+			"type": "string"
+		}
+	]
+}
