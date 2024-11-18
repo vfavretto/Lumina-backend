@@ -11,6 +11,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const path_1 = __importDefault(require("path"));
 const fs_1 = __importDefault(require("fs"));
+const yaml_1 = __importDefault(require("yaml")); // Importa o parser YAML
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 // Middleware para CORS
@@ -21,24 +22,22 @@ app.use((0, cors_1.default)({
 (0, database_1.default)();
 // Middleware para aceitar JSON
 app.use(express_1.default.json());
-// Caminho para o arquivo swagger-output.json dependendo do ambiente
+// Caminho para o arquivo Swagger YAML dependendo do ambiente
 const swaggerPath = process.env.NODE_ENV === "production"
-    ? path_1.default.join(__dirname, "../dist/config/swagger-output.json") // Para produção, usar dist/
-    : path_1.default.join(__dirname, "../src/config/swagger-output.json"); // Para desenvolvimento, usar src/
+    ? path_1.default.join(__dirname, "../dist/config/swagger.yaml") // Para produção, usar dist/
+    : path_1.default.join(__dirname, "../src/config/swagger.yaml"); // Para desenvolvimento, usar src/
 let swaggerFile;
-// Verifique se o arquivo Swagger existe
+// Verifique se o arquivo Swagger YAML existe
 if (fs_1.default.existsSync(swaggerPath)) {
-    swaggerFile = require(swaggerPath);
+    // Carrega o YAML e converte para um objeto JavaScript
+    const swaggerContent = fs_1.default.readFileSync(swaggerPath, "utf-8");
+    swaggerFile = yaml_1.default.parse(swaggerContent);
 }
 else {
-    console.error("⚠️ Swagger file not found. Documentation will not be available.");
+    console.error("⚠️ Arquivo Swagger não encontrado. A documentação não estará disponível.");
 }
-// Middleware do Swagger apenas se o JSON existir
+// Middleware do Swagger apenas se o YAML existir
 if (swaggerFile) {
-    console.log(swaggerFile);
-    // Acesse os arquivos estáticos diretamente do swagger-ui-dist no Vercel
-    app.use("/docs", express_1.default.static(path_1.default.join(__dirname, "../../node_modules", "swagger-ui-dist")));
-    // Swagger UI setup
     app.use("/docs", swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerFile));
 }
 // Rotas

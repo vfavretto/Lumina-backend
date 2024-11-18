@@ -17,25 +17,20 @@ const admModel_1 = require("../models/admModel");
 const enterpriseModel_1 = require("../models/enterpriseModel");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-// Função para adicionar o primeiro administrador
 const adicionarPrimeiroAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     try {
-        // Verificar se já existe algum administrador
         const adminExistente = yield admModel_1.Administrador.findOne();
         if (adminExistente) {
             res.status(400).json({ error: "Já existe um administrador cadastrado" });
             return;
         }
-        // Criar um novo administrador
         const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
         const novoAdmin = new admModel_1.Administrador({
             email,
             password: hashedPassword,
         });
-        // Salvando o administrador no banco de dados
         yield novoAdmin.save();
-        // Gerar token JWT para o primeiro admin
         const token = jsonwebtoken_1.default.sign({ adminId: novoAdmin._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
         res.status(201).json({
             message: "Primeiro administrador criado com sucesso",
@@ -49,24 +44,20 @@ const adicionarPrimeiroAdmin = (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.adicionarPrimeiroAdmin = adicionarPrimeiroAdmin;
-// Função para adicionar novos administradores
 const adicionarAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const { email, password } = req.body;
     try {
-        // Verificar se o email já está em uso
         const emailExistente = yield admModel_1.Administrador.findOne({ email });
         if (emailExistente) {
             res.status(400).json({ error: "Este email já está em uso" });
             return;
         }
-        // Criptografando a senha do novo administrador
         const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
         const novoAdmin = new admModel_1.Administrador({
             email,
             password: hashedPassword,
         });
-        // Salvando o novo administrador
         yield novoAdmin.save();
         res.status(201).json({
             message: "Novo administrador criado com sucesso",
@@ -80,23 +71,19 @@ const adicionarAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.adicionarAdmin = adicionarAdmin;
-// Função para validar admin (login) - atualizada para usar JWT
 const validarAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     try {
-        // Verificando se existe um administrador com o email fornecido
         const administrador = yield admModel_1.Administrador.findOne({ email });
         if (!administrador) {
             res.status(401).json({ error: "Administrador não encontrado" });
             return;
         }
-        // Comparando a senha fornecida com a senha do administrador
         const isPasswordValid = yield bcryptjs_1.default.compare(password, administrador.password);
         if (!isPasswordValid) {
             res.status(401).json({ error: "Senha inválida" });
             return;
         }
-        // Gerando token JWT para o admin
         const token = jsonwebtoken_1.default.sign({ adminId: administrador._id }, process.env.JWT_SECRET, { expiresIn: '24h' });
         res.status(200).json({
             message: "Login de administrador bem-sucedido",
@@ -110,7 +97,6 @@ const validarAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.validarAdmin = validarAdmin;
-// Middleware melhorado de verificação de admin
 const verificarAutenticacaoAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
@@ -119,15 +105,12 @@ const verificarAutenticacaoAdmin = (req, res, next) => __awaiter(void 0, void 0,
             res.status(401).json({ error: "Token não fornecido" });
             return;
         }
-        // Verificar e decodificar o token
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
-        // Buscar o admin no banco
         const admin = yield admModel_1.Administrador.findById(decoded.adminId);
         if (!admin) {
             res.status(403).json({ error: "Administrador não encontrado" });
             return;
         }
-        // Adicionar o admin ao objeto da requisição
         req.admin = admin;
         next();
     }
@@ -137,7 +120,6 @@ const verificarAutenticacaoAdmin = (req, res, next) => __awaiter(void 0, void 0,
     }
 });
 exports.verificarAutenticacaoAdmin = verificarAutenticacaoAdmin;
-// Método para deletar empresa (protegido)
 const deletarEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const { id } = req.params;
@@ -160,7 +142,6 @@ const deletarEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.deletarEmpresa = deletarEmpresa;
-// Método para editar empresa (protegido)
 const editarEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b, _c;
     const { id } = req.params;
@@ -197,7 +178,6 @@ const editarEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.editarEmpresa = editarEmpresa;
-// Método para listar empresas (protegido)
 const listarEmpresas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
@@ -214,7 +194,6 @@ const listarEmpresas = (req, res) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.listarEmpresas = listarEmpresas;
-// Método para buscar empresa específica (protegido)
 const buscarEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const { id } = req.params;
