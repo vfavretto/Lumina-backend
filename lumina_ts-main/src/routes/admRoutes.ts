@@ -18,7 +18,7 @@ router.put("/admin/:id", verificarAutenticacaoAdmin, editarEmpresa);
 router.get("/admin", verificarAutenticacaoAdmin, listarEmpresas);
 router.get("/admin/:id", verificarAutenticacaoAdmin, buscarEmpresa);
 
-// Rota para validar login de administrador
+// Rota Públicas - para validar login de administrador
 router.post("/admin/login", validarAdmin);
 router.post("/admin/primeiro", adicionarPrimeiroAdmin);
 router.post("/admin", verificarAutenticacaoAdmin, adicionarAdmin);

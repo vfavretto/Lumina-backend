@@ -43,7 +43,6 @@ interface IEmpresa extends Document {
   };
 }
 
-// Definindo o esquema do modelo de Empresa
 const EmpresaSchema = new Schema<IEmpresa>({
   auth: {
     nomeEmpresa: { type: String, required: true },
@@ -77,5 +76,4 @@ const EmpresaSchema = new Schema<IEmpresa>({
   },
 });
 
-// Criando o modelo de Empresa
 export const Empresa = mongoose.model<IEmpresa>("Empresa", EmpresaSchema);

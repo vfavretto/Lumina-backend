@@ -8,7 +8,6 @@ interface IMensagem extends Document {
   data: Date;
 }
 
-// Definindo o esquema do modelo de Mensagem
 const mensagemSchema = new Schema<IMensagem>({
   idEmpresaEnvia: { type: mongoose.Schema.Types.ObjectId, ref: "Empresa", required: true },
   idEmpresaRecebe: { type: mongoose.Schema.Types.ObjectId, ref: "Empresa", required: true },
@@ -16,5 +15,4 @@ const mensagemSchema = new Schema<IMensagem>({
   data: { type: Date, default: Date.now }, // Data padrão é a data atual
 });
 
-// Criando o modelo de Mensagem
 export const Mensagem = mongoose.model<IMensagem>("Mensagem", mensagemSchema);

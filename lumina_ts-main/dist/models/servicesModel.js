@@ -25,10 +25,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Servico = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-// Definindo o esquema do modelo de Serviço
 const servicoSchema = new mongoose_1.Schema({
     nomeServ: { type: String, required: true },
     descServ: { type: String, required: true },
 });
-// Criando o modelo de Serviço
 exports.Servico = mongoose_1.default.model("Servico", servicoSchema);

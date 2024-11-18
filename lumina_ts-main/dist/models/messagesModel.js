@@ -25,12 +25,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Mensagem = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-// Definindo o esquema do modelo de Mensagem
 const mensagemSchema = new mongoose_1.Schema({
     idEmpresaEnvia: { type: mongoose_1.default.Schema.Types.ObjectId, ref: "Empresa", required: true },
     idEmpresaRecebe: { type: mongoose_1.default.Schema.Types.ObjectId, ref: "Empresa", required: true },
     mensagem: { type: String, required: true },
     data: { type: Date, default: Date.now }, // Data padrão é a data atual
 });
-// Criando o modelo de Mensagem
 exports.Mensagem = mongoose_1.default.model("Mensagem", mensagemSchema);

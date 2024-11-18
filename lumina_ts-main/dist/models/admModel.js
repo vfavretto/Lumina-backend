@@ -25,10 +25,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Administrador = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-// Definindo o esquema do modelo de Administrador
 const administradorSchema = new mongoose_1.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
 });
-// Criando o modelo de Administrador
 exports.Administrador = mongoose_1.default.model("Administrador", administradorSchema);
