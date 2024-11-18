@@ -133,7 +133,7 @@ export const getEmpresa = async (req: Request, res: Response): Promise<void> => 
 export const updateEmpresa = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params; // O ID da empresa será passado na URL
   const {
-    nomeEmpresa, telefoneEmpresa, emailEmpresa, siteEmpresa, tipoEmpresa, CNPJ,
+    nomeEmpresa, senha, telefoneEmpresa, emailEmpresa, siteEmpresa, tipoEmpresa, CNPJ,
     endereco, redesSociais, mensagens, servicos, userImg, local
   } = req.body;
 
@@ -142,8 +142,20 @@ export const updateEmpresa = async (req: Request, res: Response): Promise<void> 
     const updatedEmpresa = await Empresa.findByIdAndUpdate(
       id,
       {
-        nomeEmpresa, telefoneEmpresa, emailEmpresa, siteEmpresa, tipoEmpresa, CNPJ,
-        endereco, redesSociais, mensagens, servicos, userImg, local
+        'auth.nomeEmpresa': nomeEmpresa,  // Atualiza o campo dentro de 'auth'
+        'auth.senha': senha,
+        'auth.email': emailEmpresa,
+        telefoneEmpresa, 
+        emailEmpresa, 
+        siteEmpresa, 
+        tipoEmpresa, 
+        CNPJ,
+        endereco, 
+        redesSociais, 
+        mensagens, 
+        servicos, 
+        userImg, 
+        local
       },
       { new: true } // Retorna o documento atualizado
     );
