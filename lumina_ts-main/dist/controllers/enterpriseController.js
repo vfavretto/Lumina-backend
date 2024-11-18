@@ -120,12 +120,24 @@ const getEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.getEmpresa = getEmpresa;
 const updateEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params; // O ID da empresa será passado na URL
-    const { nomeEmpresa, telefoneEmpresa, emailEmpresa, siteEmpresa, tipoEmpresa, CNPJ, endereco, redesSociais, mensagens, servicos, userImg, local } = req.body;
+    const { nomeEmpresa, senha, telefoneEmpresa, emailEmpresa, siteEmpresa, tipoEmpresa, CNPJ, endereco, redesSociais, mensagens, servicos, userImg, local } = req.body;
     try {
         // Atualiza os dados da empresa com os campos fornecidos
         const updatedEmpresa = yield enterpriseModel_1.Empresa.findByIdAndUpdate(id, {
-            nomeEmpresa, telefoneEmpresa, emailEmpresa, siteEmpresa, tipoEmpresa, CNPJ,
-            endereco, redesSociais, mensagens, servicos, userImg, local
+            'auth.nomeEmpresa': nomeEmpresa, // Atualiza o campo dentro de 'auth'
+            'auth.senha': senha,
+            'auth.email': emailEmpresa,
+            telefoneEmpresa,
+            emailEmpresa,
+            siteEmpresa,
+            tipoEmpresa,
+            CNPJ,
+            endereco,
+            redesSociais,
+            mensagens,
+            servicos,
+            userImg,
+            local
         }, { new: true } // Retorna o documento atualizado
         );
         // Verifica se a empresa foi encontrada
