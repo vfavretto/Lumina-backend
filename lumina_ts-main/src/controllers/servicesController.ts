@@ -2,7 +2,38 @@ import { Request, Response } from "express";
 import { Servico } from "../models/servicesModel";
 import { Empresa } from "../models/enterpriseModel";
 
-// Função para buscar um serviço pelo ID
+/**
+ * @swagger
+ * /api/v1/servicos/{id}:
+ *   get:
+ *     summary: Busca um serviço pelo ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Serviço encontrado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                 nome:
+ *                   type: string
+ *                 descricao:
+ *                   type: string
+ *                 preco:
+ *                   type: number
+ *       '404':
+ *         description: Serviço não encontrado
+ *       '500':
+ *         description: Erro interno do servidor
+ */
 export const buscarServicoPorId = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
 
@@ -20,7 +51,40 @@ export const buscarServicoPorId = async (req: Request, res: Response): Promise<v
   }
 };
 
-// Função para listar os serviços de uma empresa
+/**
+ * @swagger
+ * /api/v1/servicos/empresa/{idEmpresa}:
+ *   get:
+ *     summary: Lista todos os serviços de uma empresa
+ *     parameters:
+ *       - in: path
+ *         name: idEmpresa
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Lista de serviços da empresa retornada com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   nome:
+ *                     type: string
+ *                   descricao:
+ *                     type: string
+ *                   preco:
+ *                     type: number
+ *       '404':
+ *         description: Empresa não encontrada
+ *       '500':
+ *         description: Erro interno do servidor
+ */
 export const listarServicosDaEmpresa = async (req: Request, res: Response): Promise<void> => {
   const { idEmpresa } = req.params;
 
@@ -31,9 +95,8 @@ export const listarServicosDaEmpresa = async (req: Request, res: Response): Prom
       return;
     }
 
-    // Consultando os serviços associados à empresa
     const servicos = await Servico.find({
-      _id: { $in: empresa.servicos }, // Filtrando pelos IDs de serviços da empresa
+      _id: { $in: empresa.servicos }, 
     });
 
     res.status(200).json(servicos);
