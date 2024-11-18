@@ -1,19 +1,40 @@
 import { Request, Response } from "express";
 import { Mensagem } from "../models/messagesModel";
 
-// Função para enviar uma mensagem
+/**
+ * @swagger
+ * /api/v1/mensagens:
+ *   post:
+ *     summary: Envia uma nova mensagem entre empresas
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               idEmpresaEnvia:
+ *                 type: string
+ *               idEmpresaRecebe:
+ *                 type: string
+ *               mensagem:
+ *                 type: string
+ *     responses:
+ *       '201':
+ *         description: Mensagem enviada com sucesso
+ *       '500':
+ *         description: Erro interno do servidor
+ */
 export const enviarMensagem = async (req: Request, res: Response): Promise<void> => {
   const { idEmpresaEnvia, idEmpresaRecebe, mensagem } = req.body;
 
   try {
-    // Criação da nova mensagem
     const novaMensagem = new Mensagem({
       idEmpresaEnvia,
       idEmpresaRecebe,
       mensagem,
     });
 
-    // Salvando a nova mensagem no banco de dados
     await novaMensagem.save();
 
     res.status(201).json(novaMensagem);
@@ -23,18 +44,54 @@ export const enviarMensagem = async (req: Request, res: Response): Promise<void>
   }
 };
 
-// Função para buscar todas as mensagens entre duas empresas
+/**
+ * @swagger
+ * /api/v1/mensagens/{idEmpresa1}/{idEmpresa2}:
+ *   get:
+ *     summary: Busca todas as mensagens entre duas empresas
+ *     parameters:
+ *       - in: path
+ *         name: idEmpresa1
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: idEmpresa2
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Lista de mensagens entre as empresas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   idEmpresaEnvia:
+ *                     type: string
+ *                   idEmpresaRecebe:
+ *                     type: string
+ *                   mensagem:
+ *                     type: string
+ *                   data:
+ *                     type: string
+ *                     format: date-time
+ *       '500':
+ *         description: Erro interno do servidor
+ */
 export const buscarMensagensEntreEmpresas = async (req: Request, res: Response): Promise<void> => {
   const { idEmpresa1, idEmpresa2 } = req.params;
 
   try {
-    // Buscando as mensagens entre duas empresas
     const mensagens = await Mensagem.find({
       $or: [
         { idEmpresaEnvia: idEmpresa1, idEmpresaRecebe: idEmpresa2 },
         { idEmpresaEnvia: idEmpresa2, idEmpresaRecebe: idEmpresa1 },
       ],
-    }).sort({ data: 1 }); // Ordenando por data crescente (mensagens mais antigas primeiro)
+    }).sort({ data: 1 });
 
     res.status(200).json(mensagens);
   } catch (error) {
@@ -43,18 +100,52 @@ export const buscarMensagensEntreEmpresas = async (req: Request, res: Response):
   }
 };
 
-// Função para buscar a última mensagem entre duas empresas
+/**
+ * @swagger
+ * /api/v1/mensagens/ultima/{idEmpresa1}/{idEmpresa2}:
+ *   get:
+ *     summary: Busca a última mensagem entre duas empresas
+ *     parameters:
+ *       - in: path
+ *         name: idEmpresa1
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: idEmpresa2
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Última mensagem entre as empresas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 idEmpresaEnvia:
+ *                   type: string
+ *                 idEmpresaRecebe:
+ *                   type: string
+ *                 mensagem:
+ *                   type: string
+ *                 data:
+ *                   type: string
+ *                   format: date-time
+ *       '500':
+ *         description: Erro interno do servidor
+ */
 export const buscarUltimaMensagem = async (req: Request, res: Response): Promise<void> => {
   const { idEmpresa1, idEmpresa2 } = req.params;
 
   try {
-    // Buscando a última mensagem entre as duas empresas
     const ultimaMensagem = await Mensagem.findOne({
       $or: [
         { idEmpresaEnvia: idEmpresa1, idEmpresaRecebe: idEmpresa2 },
         { idEmpresaEnvia: idEmpresa2, idEmpresaRecebe: idEmpresa1 },
       ],
-    }).sort({ data: -1 }); // Ordenando por data decrescente (última mensagem primeiro)
+    }).sort({ data: -1 }); 
 
     res.status(200).json(ultimaMensagem);
   } catch (error) {
