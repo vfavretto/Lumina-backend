@@ -9,7 +9,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const existingEmpresa = await Empresa.findOne({ "auth.email": email });
     if (existingEmpresa) {
-      res.status(400).json({ error: "User already exists" });
+      res.status(400).json({ error: "Usuario já existe" });
       return;
     }
 
@@ -43,7 +43,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const empresa = await Empresa.findOne({ "auth.email": email });
     if (!empresa || !empresa.auth) {
-      res.status(401).json({ error: "User not found" });
+      res.status(401).json({ error: "Usuario não encontrado" });
       return;
     }
 
@@ -52,7 +52,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       empresa.auth.password
     );
     if (!isPasswordValid) {
-      res.status(401).json({ error: "Invalid password" });
+      res.status(401).json({ error: "Senha invalida" });
       return;
     }
 
@@ -72,7 +72,7 @@ export const checkAuth = async (req: Request, res: Response, next: NextFunction)
   const token = req.headers.authorization?.split(" ")[1]; // Extraímos o token do cabeçalho
 
   if (!token) {
-    res.status(401).json({ error: "No token provided" });
+    res.status(401).json({ error: "Nenhum token fornecido" });
     return;
   }
 
@@ -82,7 +82,7 @@ export const checkAuth = async (req: Request, res: Response, next: NextFunction)
     const empresa = await Empresa.findById(decoded.empresaId);
 
     if (!empresa) {
-      res.status(404).json({ error: "Empresa not found" });
+      res.status(404).json({ error: "Empresa não encontrada" });
       return;
     }
 
@@ -90,8 +90,8 @@ export const checkAuth = async (req: Request, res: Response, next: NextFunction)
 
     next();
   } catch (error) {
-    console.error("Error verifying token:", error);
-    res.status(401).json({ error: "Invalid token" });
+    console.error("Erro ao verificar token:", error);
+    res.status(401).json({ error: "Token invalido" });
   }
 };
 
@@ -103,13 +103,13 @@ export const getEmpresa = async (req: Request, res: Response): Promise<void> => 
     console.log(empresa);
 
     if (!empresa) {
-      res.status(404).json({ error: "Empresa not found" });
+      res.status(404).json({ error: "Empresa não encontrada" });
       return;
     }
 
     res.status(200).json(empresa);
   } catch (error) {
-    console.error("Error fetching empresa:", error);
+    console.error("Erro ao buscar empresa:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -117,7 +117,7 @@ export const getEmpresa = async (req: Request, res: Response): Promise<void> => 
 export const updateEmpresa = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params; 
   const {
-    nomeEmpresa, senha, telefoneEmpresa, emailEmpresa, siteEmpresa, tipoEmpresa, CNPJ,
+    nomeEmpresa, password, telefoneEmpresa, emailEmpresa, siteEmpresa, tipoEmpresa, CNPJ,
     endereco, redesSociais, mensagens, servicos, userImg, local
   } = req.body;
 
@@ -126,7 +126,7 @@ export const updateEmpresa = async (req: Request, res: Response): Promise<void> 
       id,
       {
         'auth.nomeEmpresa': nomeEmpresa,  
-        'auth.senha': senha,
+        'auth.password': password,
         'auth.email': emailEmpresa,
         telefoneEmpresa, 
         emailEmpresa, 
@@ -144,13 +144,13 @@ export const updateEmpresa = async (req: Request, res: Response): Promise<void> 
     );
 
     if (!updatedEmpresa) {
-      res.status(404).json({ error: "Empresa not found" });
+      res.status(404).json({ error: "Empresa não encontrada" });
       return;
     }
 
     res.status(200).json({ message: "Dados da empresa atualizados com sucesso!", empresa: updatedEmpresa });
   } catch (error) {
-    console.error("Error updating empresa:", error);
+    console.error("Erro ao atualizar empresa:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
@@ -162,13 +162,13 @@ export const deleteEmpresa = async (req: Request, res: Response): Promise<void> 
     const empresa = await Empresa.findByIdAndDelete(id);
 
     if (!empresa) {
-      res.status(404).json({ error: "Empresa not found" });
+      res.status(404).json({ error: "Empresa não encontrada" });
       return;
     }
 
     res.status(204).json();
   } catch (error) {
-    console.error("Error deleting empresa:", error);
+    console.error("Erro ao deletar empresa:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
