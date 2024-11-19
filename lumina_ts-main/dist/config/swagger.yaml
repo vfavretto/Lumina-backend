@@ -1,0 +1,569 @@
+openapi: 3.0.1
+info:
+  title: API de Administração
+  description: API para gerenciar administradores e empresas.
+  version: 1.0.0
+
+paths:
+  admins/admin/primeiro:
+    post:
+      summary: Adicionar o primeiro administrador
+      description: Cria o primeiro administrador no sistema, caso nenhum exista.
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminInput'
+      responses:
+        201:
+          description: Primeiro administrador criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminCreatedResponse'
+        400:
+          description: Administrador já existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  admins/admin:
+    post:
+      summary: Adicionar um novo administrador
+      description: Adiciona um novo administrador ao sistema. Apenas administradores autenticados podem realizar esta ação.
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminInput'
+      responses:
+        201:
+          description: Novo administrador criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminCreatedResponse'
+        400:
+          description: Email já está em uso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      summary: Listar empresas
+      description: Retorna uma lista de todas as empresas. Apenas administradores autenticados podem realizar esta ação.
+      tags:
+        - Admin
+      responses:
+        200:
+          description: Lista de empresas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmpresasResponse'
+        500:
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  admins/admin/login:
+    post:
+      summary: Login de administrador
+      description: Autentica um administrador e retorna um token de acesso.
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminInput'
+      responses:
+        200:
+          description: Login bem-sucedido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminLoginResponse'
+        401:
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  admins/{id}:
+    get:
+      summary: Buscar empresa por ID
+      description: Retorna os detalhes de uma empresa com base no ID fornecido.
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          description: ID da empresa
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Empresa encontrada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmpresaResponse'
+        404:
+          description: Empresa não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    delete:
+      summary: Deletar uma empresa
+      description: Remove uma empresa do sistema. Apenas administradores autenticados podem realizar esta ação.
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          description: ID da empresa a ser deletada
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Empresa deletada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        404:
+          description: Empresa não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    put:
+      summary: Editar uma empresa
+      description: Atualiza informações de uma empresa existente. Apenas administradores autenticados podem realizar esta ação.
+      tags:
+        - Admin
+      parameters:
+        - name: id
+          in: path
+          description: ID da empresa a ser atualizada
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmpresaInput'
+      responses:
+        200:
+          description: Empresa atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        404:
+          description: Empresa não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    
+  auth/empresas/register:
+    post:
+      summary: Registrar uma nova empresa
+      description: Registra uma nova empresa no sistema com email e senha. Retorna o token de autenticação.
+      tags:
+        - Empresas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        201:
+          description: Empresa registrada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterResponse'
+        400:
+          description: A empresa já existe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  auth/empresas/login:
+    post:
+      summary: Login de empresa
+      description: Realiza login de uma empresa com email e senha. Retorna o token de autenticação.
+      tags:
+        - Empresas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        200:
+          description: Login bem-sucedido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        401:
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  auth/empresas/{id}:
+    get:
+      summary: Buscar empresa por ID
+      description: Retorna os detalhes de uma empresa com base no ID fornecido.
+      tags:
+        - Empresas
+      parameters:
+        - name: id
+          in: path
+          description: ID da empresa
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Empresa encontrada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmpresaResponse'
+        404:
+          description: Empresa não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Editar uma empresa
+      description: Atualiza os dados de uma empresa. A autenticação é necessária.
+      tags:
+        - Empresas
+      parameters:
+        - name: id
+          in: path
+          description: ID da empresa a ser editada
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEmpresaRequest'
+      responses:
+        200:
+          description: Empresa atualizada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateEmpresaResponse'
+        404:
+          description: Empresa não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      summary: Deletar uma empresa
+      description: Deleta uma empresa do sistema. A autenticação é necessária.
+      tags:
+        - Empresas
+      parameters:
+        - name: id
+          in: path
+          description: ID da empresa a ser deletada
+          required: true
+          schema:
+            type: string
+      responses:
+        204:
+          description: Empresa deletada com sucesso
+        404:
+          description: Empresa não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Erro interno do servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  auth/empresas/checkauth:
+    get:
+      summary: Verificar autenticação da empresa
+      description: Verifica se o token de autenticação fornecido é válido.
+      tags:
+        - Empresas
+      responses:
+        200:
+          description: Token válido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckAuthResponse'
+        401:
+          description: Token inválido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /mensagens:
+    post:
+      summary: Enviar uma mensagem entre empresas
+      description: Envia uma mensagem de uma empresa para outra. A empresa de envio e de recebimento devem ser especificadas.
+      tags:
+        - Mensagens
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EnviarMensagemRequest'
+      responses:
+        201:
+          description: Mensagem enviada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensagemResponse'
+        500:
+          description: Erro ao enviar a mensagem
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /mensagens/{idEmpresa1}/{idEmpresa2}:
+    get:
+      summary: Buscar mensagens entre duas empresas
+      description: Retorna todas as mensagens trocadas entre as duas empresas especificadas, ordenadas por data.
+      tags:
+        - Mensagens
+      parameters:
+        - name: idEmpresa1
+          in: path
+          description: ID da primeira empresa
+          required: true
+          schema:
+            type: string
+        - name: idEmpresa2
+          in: path
+          description: ID da segunda empresa
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Mensagens entre as duas empresas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MensagemResponse'
+        500:
+          description: Erro ao buscar as mensagens
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /mensagens/ultima/{idEmpresa1}/{idEmpresa2}:
+    get:
+      summary: Buscar a última mensagem entre duas empresas
+      description: Retorna a última mensagem trocada entre as duas empresas especificadas.
+      tags:
+        - Mensagens
+      parameters:
+        - name: idEmpresa1
+          in: path
+          description: ID da primeira empresa
+          required: true
+          schema:
+            type: string
+        - name: idEmpresa2
+          in: path
+          description: ID da segunda empresa
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Última mensagem entre as empresas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MensagemResponse'
+        500:
+          description: Erro ao buscar a última mensagem
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /servicos/{id}:
+    get:
+      summary: Buscar serviço por ID
+      description: Retorna as informações de um serviço específico com base no ID fornecido.
+      tags:
+        - Serviços
+      parameters:
+        - name: id
+          in: path
+          description: ID do serviço
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Serviço encontrado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServicoResponse'
+        404:
+          description: Serviço não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Erro ao buscar serviço
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /empresas/{idEmpresa}/servicos:
+    get:
+      summary: Listar serviços da empresa
+      description: Retorna todos os serviços de uma empresa específica com base no seu ID.
+      tags:
+        - Serviços
+      parameters:
+        - name: idEmpresa
+          in: path
+          description: ID da empresa
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Lista de serviços da empresa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ServicoResponse'
+        404:
+          description: Empresa não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Erro ao listar serviços da empresa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
