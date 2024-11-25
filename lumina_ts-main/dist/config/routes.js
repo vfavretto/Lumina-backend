@@ -16,5 +16,5 @@ router.use('/services', servicesRoutes_1.default);
 // Rotas de mensagens
 router.use('/messages', messagesRoutes_1.default);
 // Rotas de administradores
-router.use('/admins', admRoutes_1.default);
+router.use('/', admRoutes_1.default);
 exports.default = router;

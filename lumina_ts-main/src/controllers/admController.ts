@@ -201,7 +201,12 @@ export const editarEmpresa = async (
       id,
       { $set: dadosAtualizacao },
       { new: true, runValidators: true }
-    );
+    ).exec();
+
+    if (!empresaAtualizada) {
+      res.status(404).json({ error: "Empresa não encontrada" });
+      return;
+    }
 
     res.status(200).json({
       message: "Empresa atualizada com sucesso",
@@ -209,6 +214,15 @@ export const editarEmpresa = async (
       updatedBy: req.admin?.email
     });
   } catch (error) {
+    // Verifica se é um erro de validação do Mongoose
+    if (error instanceof Error && 'name' in error && error.name === 'ValidationError') {
+      res.status(400).json({ 
+        error: "Erro de validação", 
+        details: (error as any).message 
+      });
+      return;
+    }
+
     console.error("Erro ao atualizar empresa:", error);
     res.status(500).json({ error: (error as Error).message });
   }

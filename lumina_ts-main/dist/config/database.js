@@ -14,6 +14,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    if (process.env.NODE_ENV === 'test') {
+        console.log('Ignorando conexão ao MongoDB em ambiente de teste');
+        return;
+    }
     const mongoURI = process.env.MONGODB_URI;
     if (!mongoURI) {
         console.error('MONGODB_URI is not defined');

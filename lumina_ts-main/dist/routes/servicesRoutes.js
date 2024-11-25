@@ -7,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 const servicesController_1 = require("../controllers/servicesController");
 const router = express_1.default.Router();
 // Rota para buscar um serviço pelo ID
-router.get("/servicos/:id", servicesController_1.buscarServicoPorId);
+router.get("/:id", servicesController_1.buscarServicoPorId);
 // Rota para listar os serviços de uma empresa
-router.get("/empresa/:idEmpresa/servicos", servicesController_1.listarServicosDaEmpresa);
+router.get("/empresa/:idEmpresa", servicesController_1.listarServicosDaEmpresa);
 exports.default = router;

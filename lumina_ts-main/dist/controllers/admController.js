@@ -165,7 +165,11 @@ const editarEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         if ((_b = dadosAtualizacao.auth) === null || _b === void 0 ? void 0 : _b.password) {
             dadosAtualizacao.auth.password = yield bcryptjs_1.default.hash(dadosAtualizacao.auth.password, 10);
         }
-        const empresaAtualizada = yield enterpriseModel_1.Empresa.findByIdAndUpdate(id, { $set: dadosAtualizacao }, { new: true, runValidators: true });
+        const empresaAtualizada = yield enterpriseModel_1.Empresa.findByIdAndUpdate(id, { $set: dadosAtualizacao }, { new: true, runValidators: true }).exec();
+        if (!empresaAtualizada) {
+            res.status(404).json({ error: "Empresa não encontrada" });
+            return;
+        }
         res.status(200).json({
             message: "Empresa atualizada com sucesso",
             empresa: empresaAtualizada,
@@ -173,6 +177,14 @@ const editarEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
     catch (error) {
+        // Verifica se é um erro de validação do Mongoose
+        if (error instanceof Error && 'name' in error && error.name === 'ValidationError') {
+            res.status(400).json({
+                error: "Erro de validação",
+                details: error.message
+            });
+            return;
+        }
         console.error("Erro ao atualizar empresa:", error);
         res.status(500).json({ error: error.message });
     }

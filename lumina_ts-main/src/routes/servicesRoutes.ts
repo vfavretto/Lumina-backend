@@ -4,9 +4,9 @@ import { buscarServicoPorId, listarServicosDaEmpresa } from "../controllers/serv
 const router = express.Router();
 
 // Rota para buscar um serviço pelo ID
-router.get("/servicos/:id", buscarServicoPorId);
+router.get("/:id", buscarServicoPorId);
 
 // Rota para listar os serviços de uma empresa
-router.get("/empresa/:idEmpresa/servicos", listarServicosDaEmpresa);
+router.get("/empresa/:idEmpresa", listarServicosDaEmpresa);
 
 export default router;

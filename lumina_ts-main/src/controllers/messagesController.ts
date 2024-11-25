@@ -22,18 +22,23 @@ export const enviarMensagem = async (req: Request, res: Response): Promise<void>
 
 export const buscarMensagensEntreEmpresas = async (req: Request, res: Response): Promise<void> => {
   const { idEmpresa1, idEmpresa2 } = req.params;
-
+  const limit = parseInt(req.query.limit as string) || 20;
+  const offset = parseInt(req.query.offset as string) || 0;
   try {
     const mensagens = await Mensagem.find({
       $or: [
         { idEmpresaEnvia: idEmpresa1, idEmpresaRecebe: idEmpresa2 },
         { idEmpresaEnvia: idEmpresa2, idEmpresaRecebe: idEmpresa1 },
       ],
-    }).sort({ data: 1 });
+    })
+      .sort({ data: -1 })
+      .skip(offset)
+      .limit(limit)
+      .exec();
 
     res.status(200).json(mensagens);
   } catch (error) {
-    console.error("Erro ao buscar mensagens:", error);
+    console.error("Erro ao buscar mensagens paginadas:", error);
     res.status(500).json({ error: (error as Error).message });
   }
 };

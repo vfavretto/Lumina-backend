@@ -12,7 +12,7 @@ const mensagemSchema = new Schema<IMensagem>({
   idEmpresaEnvia: { type: mongoose.Schema.Types.ObjectId, ref: "Empresa", required: true },
   idEmpresaRecebe: { type: mongoose.Schema.Types.ObjectId, ref: "Empresa", required: true },
   mensagem: { type: String, required: true },
-  data: { type: Date, default: Date.now }, // Data padrão é a data atual
+  data: { type: Date, default: Date.now },
 });
 
 export const Mensagem = mongoose.model<IMensagem>("Mensagem", mensagemSchema);

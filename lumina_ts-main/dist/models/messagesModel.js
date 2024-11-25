@@ -29,6 +29,6 @@ const mensagemSchema = new mongoose_1.Schema({
     idEmpresaEnvia: { type: mongoose_1.default.Schema.Types.ObjectId, ref: "Empresa", required: true },
     idEmpresaRecebe: { type: mongoose_1.default.Schema.Types.ObjectId, ref: "Empresa", required: true },
     mensagem: { type: String, required: true },
-    data: { type: Date, default: Date.now }, // Data padrão é a data atual
+    data: { type: Date, default: Date.now },
 });
 exports.Mensagem = mongoose_1.default.model("Mensagem", mensagemSchema);

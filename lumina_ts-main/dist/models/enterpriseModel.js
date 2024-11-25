@@ -34,8 +34,11 @@ const EmpresaSchema = new mongoose_1.Schema({
     telefoneEmpresa: { type: String },
     emailEmpresa: { type: String },
     siteEmpresa: { type: String },
-    tipoEmpresa: [{ type: String }],
-    CNPJ: { type: String },
+    tipoEmpresa: {
+        type: String,
+        enum: ["contratante", "fornecedor", "ambos"],
+    },
+    CNPJ: { type: String, unique: true, sparse: true },
     endereco: {
         cidade: { type: String },
         UF: { type: String },

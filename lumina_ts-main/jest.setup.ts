@@ -6,11 +6,12 @@ let mongoServer: MongoMemoryServer;
 
 beforeAll(async () => {
   try {
-    // Inicializa o servidor MongoDB em memória
+    console.log('Iniciando MongoMemoryServer...');
     mongoServer = await MongoMemoryServer.create();
     const mongoUri = mongoServer.getUri();
-    
+    console.log(`MongoDB iniciado em: ${mongoUri}`);
     await mongoose.connect(mongoUri);
+    console.log('Conexão com o MongoDB estabelecida.');
   } catch (error) {
     console.error('Erro ao conectar com MongoDB:', error);
     throw error;
@@ -23,7 +24,6 @@ afterAll(async () => {
   await mongoServer.stop();
 });
 
-// Limpa todas as coleções após cada teste
 afterEach(async () => {
   const collections = mongoose.connection.collections;
   for (const key in collections) {

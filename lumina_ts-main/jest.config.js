@@ -28,4 +28,7 @@ module.exports = {
   coverageDirectory: 'coverage',
   coverageReporters: ['text', 'lcov'],
   testTimeout: 30000,
+  testPathIgnorePatterns: ["/node_modules/", "/dist/"],
+  
 };
+process.env.NODE_ENV = 'test';

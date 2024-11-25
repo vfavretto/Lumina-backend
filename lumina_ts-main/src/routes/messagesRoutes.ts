@@ -3,13 +3,15 @@ import { enviarMensagem, buscarMensagensEntreEmpresas, buscarUltimaMensagem } fr
 
 const router = express.Router();
 
-// Rota para enviar uma nova mensagem
-router.post("/mensagens", enviarMensagem);
+router.post("/", enviarMensagem);
+router.get("/:idEmpresa1/:idEmpresa2", buscarMensagensEntreEmpresas);
 
-// Rota para buscar mensagens entre duas empresas
-router.get("/mensagens/:idEmpresa1/:idEmpresa2", buscarMensagensEntreEmpresas);
+// Exemplo buscar mensagens
 
-// Rota para buscar a última mensagem entre duas empresas
+/// GET /api/v1/messages/:idEmpresa1/:idEmpresa2?limit=20&offset=0   Primeiro Lote
+/// GET /api/v1/messages/:idEmpresa1/:idEmpresa2?limit=20&offset=20  Segundo Lote
+/// GET /api/v1/messages/:idEmpresa1/:idEmpresa2?limit=20&offset=40  Terceiro lote...
+
 router.get("/ultima-mensagem/:idEmpresa1/:idEmpresa2", buscarUltimaMensagem);
 
 export default router;

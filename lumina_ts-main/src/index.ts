@@ -7,7 +7,6 @@ import swaggerUi from "swagger-ui-express";
 import path from "path";
 import fs from "fs";
 import yaml from "yaml"; 
-import { VercelRequest, VercelResponse } from "@vercel/node";
 
 dotenv.config();
 
@@ -46,6 +45,4 @@ if (swaggerFile) {
 
 app.use("/api/v1", routes);
 
-export default (req: VercelRequest, res: VercelResponse) => {
-  return app(req, res);
-};
+export default app;

@@ -1,6 +1,12 @@
 import mongoose from 'mongoose';
 
 const connectDB = async () => {
+
+  if (process.env.NODE_ENV === 'test') {
+    console.log('Ignorando conexão ao MongoDB em ambiente de teste');
+    return;
+  }
+  
   const mongoURI = process.env.MONGODB_URI as string | undefined;
   if (!mongoURI) {
     console.error('MONGODB_URI is not defined');

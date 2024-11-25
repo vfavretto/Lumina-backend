@@ -31,7 +31,7 @@ interface IEmpresa extends Document {
   telefoneEmpresa?: string;
   emailEmpresa?: string;
   siteEmpresa?: string;
-  tipoEmpresa: string[];
+  tipoEmpresa: "contratante" | "fornecedor" | "ambos";
   CNPJ?: string;
   endereco?: IEndereco;
   redesSociais?: IRedesSociais;
@@ -52,8 +52,11 @@ const EmpresaSchema = new Schema<IEmpresa>({
   telefoneEmpresa: { type: String },
   emailEmpresa: { type: String },
   siteEmpresa: { type: String },
-  tipoEmpresa: [{ type: String }],
-  CNPJ: { type: String },
+  tipoEmpresa: {
+    type: String,
+    enum: ["contratante", "fornecedor", "ambos"],
+  },
+  CNPJ: { type: String, unique: true, sparse: true },
   endereco: {
     cidade: { type: String },
     UF: { type: String },
