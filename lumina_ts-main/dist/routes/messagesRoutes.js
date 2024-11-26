@@ -13,4 +13,5 @@ router.get("/:idEmpresa1/:idEmpresa2", messagesController_1.buscarMensagensEntre
 /// GET /api/v1/messages/:idEmpresa1/:idEmpresa2?limit=20&offset=20  Segundo Lote
 /// GET /api/v1/messages/:idEmpresa1/:idEmpresa2?limit=20&offset=40  Terceiro lote...
 router.get("/ultima-mensagem/:idEmpresa1/:idEmpresa2", messagesController_1.buscarUltimaMensagem);
+router.get("/:idEmpresa", messagesController_1.buscarEmpresasComConversa);
 exports.default = router;

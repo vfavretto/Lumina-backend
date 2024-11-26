@@ -9,6 +9,7 @@ const router = express_1.default.Router();
 router.post('/register', enterpriseController_1.register);
 router.post('/login', enterpriseController_1.login);
 router.get("/profile/:id", enterpriseController_1.checkAuth, enterpriseController_1.getEmpresa);
+router.get("/profilePublic/:id", enterpriseController_1.getEmpresaPublica);
 router.put("/profile/:id", enterpriseController_1.checkAuth, enterpriseController_1.updateEmpresa);
 router.delete("/profile/:id", enterpriseController_1.checkAuth, enterpriseController_1.deleteEmpresa);
 router.get("/enterprises", enterpriseController_1.listEmpresas);

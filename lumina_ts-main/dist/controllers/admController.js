@@ -132,7 +132,7 @@ const deletarEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function*
         yield enterpriseModel_1.Empresa.findByIdAndDelete(id);
         res.status(200).json({
             message: "Empresa deletada com sucesso",
-            deletedCompany: empresa.auth.nomeEmpresa,
+            deletedCompany: empresa.auth.userName,
             deletedBy: (_a = req.admin) === null || _a === void 0 ? void 0 : _a.email
         });
     }

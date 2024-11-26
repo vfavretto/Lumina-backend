@@ -20,7 +20,7 @@ interface IRedesSociais {
 
 // Interface para autenticação
 interface IAuth {
-  nomeEmpresa: string;
+  userName: string;
   email: string;
   password: string;
 }
@@ -29,6 +29,9 @@ interface IAuth {
 interface IEmpresa extends Document {
   auth: IAuth;
   telefoneEmpresa?: string;
+  nomeResponsavel?: string;
+  cargoResponsavel?: string;
+  nomeEmpresa?: string;
   emailEmpresa?: string;
   siteEmpresa?: string;
   tipoEmpresa: "contratante" | "fornecedor" | "ambos";
@@ -37,6 +40,7 @@ interface IEmpresa extends Document {
   redesSociais?: IRedesSociais;
   servicos: mongoose.Types.ObjectId[];
   userImg?: string;
+  descricao?: string;
   local?: {
     type: string;
     coordinates: number[];
@@ -45,11 +49,14 @@ interface IEmpresa extends Document {
 
 const EmpresaSchema = new Schema<IEmpresa>({
   auth: {
-    nomeEmpresa: { type: String, required: true },
+    userName: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
   },
   telefoneEmpresa: { type: String },
+  nomeResponsavel: { type: String },
+  cargoResponsavel: { type: String },
+  nomeEmpresa: { type: String},
   emailEmpresa: { type: String },
   siteEmpresa: { type: String },
   tipoEmpresa: {
@@ -73,6 +80,7 @@ const EmpresaSchema = new Schema<IEmpresa>({
   },
   servicos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Servico" }],
   userImg: { type: String },
+  descricao: { type: String},
   local: {
     type: { type: String, default: "Point" },
     coordinates: [{ type: Number }],

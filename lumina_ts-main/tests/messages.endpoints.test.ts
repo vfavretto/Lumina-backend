@@ -14,14 +14,14 @@ describe("Messages Routes", () => {
 
   // Helper function para criar empresa
   const createEmpresa = async (
-    nomeEmpresa: string,
+    userName: string,
     email: string,
     password: string = "senha123"
   ) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const empresa = new Empresa({
       auth: {
-        nomeEmpresa,
+        userName,
         email,
         password: hashedPassword,
       },

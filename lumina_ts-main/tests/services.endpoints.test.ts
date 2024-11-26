@@ -18,7 +18,7 @@ describe("Services Routes", () => {
     const hashedPassword = await bcrypt.hash("senha123", 10);
     const empresa = new Empresa({
       auth: {
-        nomeEmpresa: "Empresa Teste",
+        userName: "Empresa Teste",
         email: "empresa@test.com",
         password: hashedPassword,
       },
@@ -138,7 +138,7 @@ describe("Services Routes", () => {
 
       const empresaSemServicos = new Empresa({
         auth: {
-          nomeEmpresa: "Empresa Sem Serviços",
+          userName: "Empresa Sem Serviços",
           email: "semservicos@test.com",
           password: await bcrypt.hash("senha123", 10),
         },

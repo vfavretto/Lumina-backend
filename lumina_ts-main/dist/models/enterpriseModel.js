@@ -27,11 +27,14 @@ exports.Empresa = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const EmpresaSchema = new mongoose_1.Schema({
     auth: {
-        nomeEmpresa: { type: String, required: true },
+        userName: { type: String, required: true },
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
     },
     telefoneEmpresa: { type: String },
+    nomeResponsavel: { type: String },
+    cargoResponsavel: { type: String },
+    nomeEmpresa: { type: String },
     emailEmpresa: { type: String },
     siteEmpresa: { type: String },
     tipoEmpresa: {
@@ -55,6 +58,7 @@ const EmpresaSchema = new mongoose_1.Schema({
     },
     servicos: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: "Servico" }],
     userImg: { type: String },
+    descricao: { type: String },
     local: {
         type: { type: String, default: "Point" },
         coordinates: [{ type: Number }],

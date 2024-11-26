@@ -29,7 +29,7 @@ describe("Admin Routes", () => {
   const createEmpresa = async (customData = {}) => {
     const defaultData = {
       auth: {
-        nomeEmpresa: "Empresa Teste",
+        userName: "Empresa Teste",
         email: `empresa${Date.now()}@test.com`,
         password: await bcrypt.hash("senha123", 10),
       },
@@ -246,7 +246,7 @@ describe("Admin Routes", () => {
       await createEmpresa();
       await createEmpresa({
         auth: {
-          nomeEmpresa: "Empresa Teste 2",
+          userName: "Empresa Teste 2",
           email: "empresa2@test.com",
           password: await bcrypt.hash("senha123", 10),
         },
@@ -260,7 +260,7 @@ describe("Admin Routes", () => {
       expect(Array.isArray(response.body.empresas)).toBeTruthy();
       expect(response.body.empresas.length).toBe(2);
       expect(response.body).toHaveProperty("quantidade", 2);
-      expect(response.body.empresas[0].auth).toHaveProperty("nomeEmpresa");
+      expect(response.body.empresas[0].auth).toHaveProperty("userName");
       expect(response.body.empresas[0].auth).toHaveProperty("email");
       expect(response.body.empresas[0].auth).not.toHaveProperty("password");
     });
@@ -300,7 +300,7 @@ describe("Admin Routes", () => {
         .set("Authorization", `Bearer ${adminToken}`);
 
       expect(response.status).toBe(200);
-      expect(response.body.empresa.auth.nomeEmpresa).toBe("Empresa Teste");
+      expect(response.body.empresa.auth.userName).toBe("Empresa Teste");
       expect(response.body.empresa.auth).toHaveProperty("email");
       expect(response.body.empresa.auth).not.toHaveProperty("password");
     });
@@ -345,7 +345,7 @@ describe("Admin Routes", () => {
       const empresa = await createEmpresa();
       const dadosAtualizacao = {
         auth: {
-          nomeEmpresa: "Empresa Atualizada",
+          userName: "Empresa Atualizada",
           email: "atualizado@test.com",
           password: "novasenha123",
         },
@@ -357,7 +357,7 @@ describe("Admin Routes", () => {
         .send(dadosAtualizacao);
 
       expect(response.status).toBe(200);
-      expect(response.body.empresa.auth.nomeEmpresa).toBe("Empresa Atualizada");
+      expect(response.body.empresa.auth.userName).toBe("Empresa Atualizada");
       expect(response.body.empresa.auth.email).toBe("atualizado@test.com");
     });
 
@@ -366,7 +366,7 @@ describe("Admin Routes", () => {
       const empresa1 = await createEmpresa();
       const empresa2 = await createEmpresa({
         auth: {
-          nomeEmpresa: "Empresa 2",
+          userName: "Empresa 2",
           email: "empresa2@test.com",
           password: await bcrypt.hash("senha123", 10),
         },
@@ -389,7 +389,7 @@ describe("Admin Routes", () => {
       const empresa = await createEmpresa();
       const dadosAtualizacao = {
         auth: {
-          nomeEmpresa: "",
+          userName: "",
           email: "atualizado@test.com",
           password: "novasenha123",
         },
@@ -415,7 +415,7 @@ describe("Admin Routes", () => {
         .set("Authorization", `Bearer ${adminToken}`)
         .send({
           auth: {
-            nomeEmpresa: "Empresa Atualizada",
+            userName: "Empresa Atualizada",
             email: "atualizado@test.com",
           },
         });

@@ -12,14 +12,14 @@ describe("Enterprise Routes", () => {
 
   // Helper function para criar empresa
   const createEmpresa = async (
-    nomeEmpresa: string = "Empresa Teste",
+    userName: string = "Empresa Teste",
     email: string = "empresa@test.com",
     password: string = "Senh@123"
   ) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const empresa = new Empresa({
       auth: {
-        nomeEmpresa,
+        userName,
         email,
         password: hashedPassword,
       },
@@ -43,14 +43,14 @@ describe("Enterprise Routes", () => {
   describe(`POST ${BASE_URL}/register`, () => {
     it("deve registrar uma nova empresa com sucesso", async () => {
       const response = await request(app).post(`${BASE_URL}/register`).send({
-        nomeEmpresa: "Nova Empresa",
+        userName: "Nova Empresa",
         email: "nova@empresa.com",
         password: "Senh@123",
       });
 
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty("token");
-      expect(response.body.empresa.auth.nomeEmpresa).toBe("Nova Empresa");
+      expect(response.body.empresa.auth.userName).toBe("Nova Empresa");
       expect(response.body.empresa.auth.email).toBe("nova@empresa.com");
     });
 
@@ -58,7 +58,7 @@ describe("Enterprise Routes", () => {
       const { empresa } = await createEmpresa();
 
       const response = await request(app).post(`${BASE_URL}/register`).send({
-        nomeEmpresa: "Outra Empresa",
+        userName: "Outra Empresa",
         email: "empresa@test.com",
         password: "Senh@123",
       });
@@ -73,7 +73,7 @@ describe("Enterprise Routes", () => {
       });
 
       const response = await request(app).post(`${BASE_URL}/register`).send({
-        nomeEmpresa: "Empresa Erro",
+        userName: "Empresa Erro",
         email: "erro@empresa.com",
         password: "Senh@123",
       });
@@ -149,7 +149,7 @@ describe("Enterprise Routes", () => {
         .set("Authorization", `Bearer ${empresaToken}`);
 
       expect(response.status).toBe(200);
-      expect(response.body.auth.nomeEmpresa).toBe("Empresa Teste");
+      expect(response.body.auth.userName).toBe("Empresa Teste");
       expect(response.body.auth.email).toBe("empresa@test.com");
     });
 
@@ -187,7 +187,7 @@ describe("Enterprise Routes", () => {
 
     it("deve atualizar empresa com sucesso", async () => {
       const dadosAtualizacao = {
-        nomeEmpresa: "Empresa Atualizada",
+        userName: "Empresa Atualizada",
         emailEmpresa: "atualizado@empresa.com",
         telefoneEmpresa: "11999999999",
         siteEmpresa: "www.empresa.com",
@@ -204,7 +204,7 @@ describe("Enterprise Routes", () => {
       expect(response.body.message).toBe(
         "Dados da empresa atualizados com sucesso!"
       );
-      expect(response.body.empresa.auth.nomeEmpresa).toBe("Empresa Atualizada");
+      expect(response.body.empresa.auth.userName).toBe("Empresa Atualizada");
       expect(response.body.empresa.emailEmpresa).toBe("atualizado@empresa.com");
     });
 
@@ -213,7 +213,7 @@ describe("Enterprise Routes", () => {
       const response = await request(app)
         .put(`${BASE_URL}/profile/${fakeId}`)
         .set("Authorization", `Bearer ${empresaToken}`)
-        .send({ nomeEmpresa: "Test" });
+        .send({ userName: "Test" });
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBe("Empresa não encontrada");
@@ -228,7 +228,7 @@ describe("Enterprise Routes", () => {
         .put(`${BASE_URL}/profile/${empresaId}`)
         .set("Authorization", `Bearer ${empresaToken}`)
         .send({
-          nomeEmpresa: "Erro Empresa",
+          userName: "Erro Empresa",
           emailEmpresa: "erro@empresa.com",
         });
 
@@ -319,7 +319,7 @@ describe("Enterprise Routes", () => {
       await Empresa.insertMany([
         {
           auth: {
-            nomeEmpresa: "Empresa 1",
+            userName: "Empresa 1",
             email: "empresa1@test.com",
             password: "Senh@123",
           },
@@ -327,7 +327,7 @@ describe("Enterprise Routes", () => {
         },
         {
           auth: {
-            nomeEmpresa: "Empresa 2",
+            userName: "Empresa 2",
             email: "empresa2@test.com",
             password: "Senh@123",
           },
@@ -335,7 +335,7 @@ describe("Enterprise Routes", () => {
         },
         {
           auth: {
-            nomeEmpresa: "Empresa 3",
+            userName: "Empresa 3",
             email: "empresa3@test.com",
             password: "Senh@123",
           },
@@ -343,7 +343,7 @@ describe("Enterprise Routes", () => {
         },
         {
           auth: {
-            nomeEmpresa: "Empresa 4",
+            userName: "Empresa 4",
             email: "empresa4@test.com",
             password: "Senh@123",
           },
@@ -351,7 +351,7 @@ describe("Enterprise Routes", () => {
         },
         {
           auth: {
-            nomeEmpresa: "Empresa 5",
+            userName: "Empresa 5",
             email: "empresa5@test.com",
             password: "Senh@123",
           },
@@ -444,7 +444,7 @@ describe("Enterprise Routes Validation", () => {
   describe(`POST ${BASE_URL}/register - Email Validation`, () => {
     it("deve rejeitar email sem domínio", async () => {
       const response = await request(app).post(`${BASE_URL}/register`).send({
-        nomeEmpresa: "Empresa Inválida",
+        userName: "Empresa Inválida",
         email: "empresa@",
         password: "SenhaValida123!",
       });
@@ -455,7 +455,7 @@ describe("Enterprise Routes Validation", () => {
 
     it("deve rejeitar email sem nome local", async () => {
       const response = await request(app).post(`${BASE_URL}/register`).send({
-        nomeEmpresa: "Empresa Inválida",
+        userName: "Empresa Inválida",
         email: "@empresa.com",
         password: "SenhaValida123!",
       });
@@ -469,7 +469,7 @@ describe("Enterprise Routes Validation", () => {
   describe(`POST ${BASE_URL}/register - Password Validation`, () => {
     it("deve rejeitar senha sem letra maiúscula", async () => {
       const response = await request(app).post(`${BASE_URL}/register`).send({
-        nomeEmpresa: "Empresa Teste",
+        userName: "Empresa Teste",
         email: "empresa@teste.com",
         password: "senhavalida123!",
       });
@@ -483,7 +483,7 @@ describe("Enterprise Routes Validation", () => {
 
     it("deve rejeitar senha sem letra minúscula", async () => {
       const response = await request(app).post(`${BASE_URL}/register`).send({
-        nomeEmpresa: "Empresa Teste",
+        userName: "Empresa Teste",
         email: "empresa@teste.com",
         password: "SENHAVALIDA123!",
       });
@@ -497,7 +497,7 @@ describe("Enterprise Routes Validation", () => {
 
     it("deve rejeitar senha sem número", async () => {
       const response = await request(app).post(`${BASE_URL}/register`).send({
-        nomeEmpresa: "Empresa Teste",
+        userName: "Empresa Teste",
         email: "empresa@teste.com",
         password: "SenhaValidaaa!",
       });
@@ -511,7 +511,7 @@ describe("Enterprise Routes Validation", () => {
 
     it("deve rejeitar senha sem caractere especial", async () => {
       const response = await request(app).post(`${BASE_URL}/register`).send({
-        nomeEmpresa: "Empresa Teste",
+        userName: "Empresa Teste",
         email: "empresa@teste.com",
         password: "SenhaValida123",
       });
@@ -525,7 +525,7 @@ describe("Enterprise Routes Validation", () => {
 
     it("deve rejeitar senha menor que 8 caracteres", async () => {
       const response = await request(app).post(`${BASE_URL}/register`).send({
-        nomeEmpresa: "Empresa Teste",
+        userName: "Empresa Teste",
         email: "empresa@teste.com",
         password: "Curta1!",
       });

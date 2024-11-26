@@ -1,11 +1,12 @@
 import express from 'express';
-import { register, login, checkAuth, getEmpresa, updateEmpresa, deleteEmpresa, listEmpresas } from '../controllers/enterpriseController';
+import { register, login, checkAuth, getEmpresa, updateEmpresa, deleteEmpresa, listEmpresas, getEmpresaPublica } from '../controllers/enterpriseController';
 
 const router = express.Router();
 
 router.post('/register', register); 
 router.post('/login', login);
 router.get("/profile/:id", checkAuth, getEmpresa);
+router.get("/profilePublic/:id", getEmpresaPublica);
 router.put("/profile/:id", checkAuth, updateEmpresa);
 router.delete("/profile/:id", checkAuth, deleteEmpresa);
 router.get("/enterprises", listEmpresas);

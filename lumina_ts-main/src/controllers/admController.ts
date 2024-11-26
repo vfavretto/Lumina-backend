@@ -154,7 +154,7 @@ export const deletarEmpresa = async (
 
     res.status(200).json({
       message: "Empresa deletada com sucesso",
-      deletedCompany: empresa.auth.nomeEmpresa,
+      deletedCompany: empresa.auth.userName,
       deletedBy: req.admin?.email
     });
   } catch (error) {

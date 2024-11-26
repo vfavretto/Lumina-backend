@@ -38,7 +38,7 @@ const validatePassword = (password: string): { valid: boolean; errors: string[] 
 };
 
 export const register = async (req: Request, res: Response): Promise<void> => {
-  const { nomeEmpresa, email, password } = req.body;
+  const { userName, email, password } = req.body;
 
   try {
     
@@ -66,7 +66,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     const empresa = new Empresa({
       auth: {
-        nomeEmpresa,
+        userName,
         email,
         password: hashedPassword,
       },
@@ -170,7 +170,6 @@ export const getEmpresa = async (
 
   try {
     const empresa = await Empresa.findById(id);
-    console.log(empresa);
 
     if (!empresa) {
       res.status(404).json({ error: "Empresa não encontrada" });
@@ -184,15 +183,41 @@ export const getEmpresa = async (
   }
 };
 
+export const getEmpresaPublica = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { id } = req.params;
+
+  try {
+    const empresa = await Empresa.findById(id);
+
+    if (!empresa) {
+      res.status(404).json({ error: "Empresa não encontrada" });
+      return;
+    }
+
+    const { auth, ...publicFields } = empresa.toObject();
+
+    res.status(200).json(publicFields);
+  } catch (error) {
+    console.error("Erro ao buscar perfil público da empresa:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 export const updateEmpresa = async (
   req: Request,
   res: Response
 ): Promise<void> => {
   const { id } = req.params;
   const {
-    nomeEmpresa,
+    userName,
     password,
     telefoneEmpresa,
+    nomeResponsavel,
+    cargoResponsavel,
+    nomeEmpresa,
     emailEmpresa,
     siteEmpresa,
     tipoEmpresa,
@@ -202,6 +227,7 @@ export const updateEmpresa = async (
     mensagens,
     servicos,
     userImg,
+    descricao,
     local,
   } = req.body;
 
@@ -209,10 +235,13 @@ export const updateEmpresa = async (
     const updatedEmpresa = await Empresa.findByIdAndUpdate(
       id,
       {
-        "auth.nomeEmpresa": nomeEmpresa,
+        "auth.userName": userName,
         "auth.password": password,
         "auth.email": emailEmpresa,
         telefoneEmpresa,
+        nomeResponsavel,
+        cargoResponsavel,
+        nomeEmpresa,
         emailEmpresa,
         siteEmpresa,
         tipoEmpresa,
@@ -222,6 +251,7 @@ export const updateEmpresa = async (
         mensagens,
         servicos,
         userImg,
+        descricao,
         local,
       },
       { new: true }

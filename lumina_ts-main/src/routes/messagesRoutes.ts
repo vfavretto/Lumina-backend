@@ -1,5 +1,5 @@
 import express from "express";
-import { enviarMensagem, buscarMensagensEntreEmpresas, buscarUltimaMensagem } from "../controllers/messagesController";
+import { enviarMensagem, buscarMensagensEntreEmpresas, buscarUltimaMensagem, buscarEmpresasComConversa } from "../controllers/messagesController";
 
 const router = express.Router();
 
@@ -13,5 +13,7 @@ router.get("/:idEmpresa1/:idEmpresa2", buscarMensagensEntreEmpresas);
 /// GET /api/v1/messages/:idEmpresa1/:idEmpresa2?limit=20&offset=40  Terceiro lote...
 
 router.get("/ultima-mensagem/:idEmpresa1/:idEmpresa2", buscarUltimaMensagem);
+
+router.get("/:idEmpresa", buscarEmpresasComConversa);
 
 export default router;

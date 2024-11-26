@@ -8,11 +8,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.listEmpresas = exports.deleteEmpresa = exports.updateEmpresa = exports.getEmpresa = exports.checkAuth = exports.login = exports.register = void 0;
+exports.listEmpresas = exports.deleteEmpresa = exports.updateEmpresa = exports.getEmpresaPublica = exports.getEmpresa = exports.checkAuth = exports.login = exports.register = void 0;
 const enterpriseModel_1 = require("../models/enterpriseModel");
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -43,7 +54,7 @@ const validatePassword = (password) => {
     };
 };
 const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { nomeEmpresa, email, password } = req.body;
+    const { userName, email, password } = req.body;
     try {
         if (!validateEmail(email)) {
             res.status(400).json({ error: "Formato de email inválido" });
@@ -65,7 +76,7 @@ const register = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
         const empresa = new enterpriseModel_1.Empresa({
             auth: {
-                nomeEmpresa,
+                userName,
                 email,
                 password: hashedPassword,
             },
@@ -139,7 +150,6 @@ const getEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     const { id } = req.params;
     try {
         const empresa = yield enterpriseModel_1.Empresa.findById(id);
-        console.log(empresa);
         if (!empresa) {
             res.status(404).json({ error: "Empresa não encontrada" });
             return;
@@ -152,15 +162,35 @@ const getEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getEmpresa = getEmpresa;
+const getEmpresaPublica = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const empresa = yield enterpriseModel_1.Empresa.findById(id);
+        if (!empresa) {
+            res.status(404).json({ error: "Empresa não encontrada" });
+            return;
+        }
+        const _a = empresa.toObject(), { auth } = _a, publicFields = __rest(_a, ["auth"]);
+        res.status(200).json(publicFields);
+    }
+    catch (error) {
+        console.error("Erro ao buscar perfil público da empresa:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+exports.getEmpresaPublica = getEmpresaPublica;
 const updateEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
-    const { nomeEmpresa, password, telefoneEmpresa, emailEmpresa, siteEmpresa, tipoEmpresa, CNPJ, endereco, redesSociais, mensagens, servicos, userImg, local, } = req.body;
+    const { userName, password, telefoneEmpresa, nomeResponsavel, cargoResponsavel, nomeEmpresa, emailEmpresa, siteEmpresa, tipoEmpresa, CNPJ, endereco, redesSociais, mensagens, servicos, userImg, descricao, local, } = req.body;
     try {
         const updatedEmpresa = yield enterpriseModel_1.Empresa.findByIdAndUpdate(id, {
-            "auth.nomeEmpresa": nomeEmpresa,
+            "auth.userName": userName,
             "auth.password": password,
             "auth.email": emailEmpresa,
             telefoneEmpresa,
+            nomeResponsavel,
+            cargoResponsavel,
+            nomeEmpresa,
             emailEmpresa,
             siteEmpresa,
             tipoEmpresa,
@@ -170,6 +200,7 @@ const updateEmpresa = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             mensagens,
             servicos,
             userImg,
+            descricao,
             local,
         }, { new: true });
         if (!updatedEmpresa) {
